@@ -1,6 +1,9 @@
 from datetime import datetime
-from sqlalchemy import String, DateTime, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, DateTime, Text, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from models.users import Users
 
 from core.dbconnect import Base
 
@@ -10,6 +13,16 @@ class Project(Base):
     id : Mapped[int] = mapped_column(
         primary_key=True,
         index=True
+    )
+
+    user_id : Mapped[int] = mapped_column(
+        ForeignKey('users.id'),
+        nullable=False,
+        index=True
+    )
+
+    user : Mapped['Users'] = relationship(
+        back_populates='projects'
     )
 
     name : Mapped[str] = mapped_column(
