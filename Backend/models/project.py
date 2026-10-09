@@ -27,7 +27,6 @@ class Project(Base):
 
     name : Mapped[str] = mapped_column(
         String,
-        unique=True,
         index=True,
         nullable=False
     )

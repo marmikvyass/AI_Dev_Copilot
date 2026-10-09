@@ -9,7 +9,7 @@ from core.dbconnect import get_db
 from models.users import Users
 from respos.users import UserRepo
 
-oauth2_schema  = OAuth2PasswordBearer(tokenUrl='/api/v1/auth/login')
+oauth2_schema  = OAuth2PasswordBearer(tokenUrl='/api/auth/login')
 def get_current_user(token: str = Depends(oauth2_schema),  db: Session = Depends(get_db))-> Users:
     credentials_exceptions = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -39,3 +39,5 @@ def get_current_user(token: str = Depends(oauth2_schema),  db: Session = Depends
 
     if user is None:
         raise credentials_exceptions
+
+    return user

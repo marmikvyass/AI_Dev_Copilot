@@ -26,8 +26,8 @@ class AuthService:
                 hashed_password
             )
 
-    def login_user(self, user:UserLogin):
-        existing_user = self.repository.get_user_by_username(user.username)
+    def login_user(self, username: str, password : str):
+        existing_user = self.repository.get_user_by_username(username)
 
         if not existing_user:
             raise HTTPException(
@@ -35,7 +35,7 @@ class AuthService:
                 detail='User with that username does not exist!'
             )
         else:
-            verified_password = verify_password(user.password, existing_user.password)
+            verified_password = verify_password(password, existing_user.password)
 
             if not verified_password:
                 raise HTTPException(
@@ -45,7 +45,7 @@ class AuthService:
             else:
                 access_token = create_access_token(
                     data = {
-                        "sub" : str(user.username)
+                        "sub" : str(existing_user.username)
                     }
                 )
 
