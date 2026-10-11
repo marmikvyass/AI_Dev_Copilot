@@ -6,7 +6,7 @@ import httpx
 from fastapi import HTTPException
 from starlette import status
 import base64
-
+from core.config import settings
 
 class GithubService:
     @staticmethod
@@ -30,6 +30,18 @@ class GithubService:
 
         return owner, repo
 
+    def get_headers(self):
+        headers = {
+            "Accept" : 'application/vnd.github+json'
+        }
+
+        if settings.GITHUB_TOKEN:
+            headers['Authorization'] = (
+                f'bearer {settings.GITHUB_TOKEN}'
+            )
+
+        return headers
+
     async def get_repo_info(self, repository_url: str) -> dict:
         owner, repo = self.parse_repo_url(repository_url)
 
@@ -39,9 +51,7 @@ class GithubService:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.get(
                     api_url,
-                    headers={
-                        "Accept" : 'application/vnd.github+json'
-                    }
+                    headers=self.get_headers()
                 )
         except httpx.TimeoutException:
             raise HTTPException(
@@ -60,6 +70,16 @@ class GithubService:
             )
 
         if response.status_code == 403:
+            print("GitHub response:", response.text)
+            print(
+                "Rate limit remaining:",
+                response.headers.get("x-ratelimit-remaining")
+            )
+            print(
+                "Rate limit reset:",
+                response.headers.get("x-ratelimit-reset")
+            )
+
             raise HTTPException(
                 status_code=502,
                 detail="GitHub API rate limit or access restriction"
@@ -98,9 +118,7 @@ class GithubService:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 response = await client.get(
                     api_url,
-                    headers={
-                        "Accept" : 'application/vnd.github+json'
-                    }
+                    headers=self.get_headers()
                 )
         except httpx.TimeoutException:
             raise HTTPException(
@@ -168,9 +186,7 @@ class GithubService:
                 response = await client.get(
                     api_url,
                     params={'ref' : branch},
-                    headers={
-                        "Accept" : 'application/vnd.github+json'
-                    }
+                    headers=self.get_headers()
                 )
         except httpx.TimeoutException:
             raise HTTPException(

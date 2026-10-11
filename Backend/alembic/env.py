@@ -7,6 +7,7 @@ from alembic import context
 from core.dbconnect import Base
 from models.project import Project
 from models.users import Users
+from models.code_chunk import CodeChunk
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

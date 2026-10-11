@@ -20,7 +20,7 @@ async def main():
 
     for file in result["files"]:
         print("\nFile:", file["path"])
-        print(file["content"][:300])
+        print(file["content"][:1000])
 
 
 if __name__ == "__main__":

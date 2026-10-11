@@ -2,8 +2,7 @@ from datetime import datetime
 from sqlalchemy import String, DateTime, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from models.users import Users
+from models.users import Users
 
 from core.dbconnect import Base
 
