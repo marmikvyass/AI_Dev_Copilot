@@ -24,7 +24,7 @@ class EmbeddingService:
 
         return response.embeddings.float_[0]
 
-    def embed_texts(self, texts: list[float])-> list[list[float]]:
+    def embed_texts(self, texts: list[str])-> list[list[float]]:
         if not texts:
             return []
 
@@ -39,4 +39,17 @@ class EmbeddingService:
         )
 
         return response.embeddings.float_
+
+    def embed_query(self, query: str) -> list[float]:
+        if not query.strip():
+            raise ValueError("Query cannot be empty")
+
+        response = self.client.embed(
+            model = self.model,
+            texts = [query],
+            input_type='search_query',
+            embedding_types=['float']
+        )
+
+        return response.embeddings.float_[0]
 
