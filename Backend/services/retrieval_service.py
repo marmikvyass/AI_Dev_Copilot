@@ -6,7 +6,7 @@ class RetrievalService:
         self.embedding_service = EmbeddingService()
         self.vector_store = VectorStoreService()
 
-    def retrieve_vector(self, ques: str, project_id: int, n_result : int = 5) -> list[dict]:
+    def retrieve_vector(self, ques: str, project_id: int, n_result : int = 5, max_distance : float = 0.65) -> list[dict]:
         if not ques.strip():
             raise ValueError('Question cannot be empty')
 
@@ -17,4 +17,10 @@ class RetrievalService:
             project_id = project_id,
             n_result = n_result
         )
+
         return matches
+        # return [
+        #     match
+        #     for match in matches
+        #     if match['distance'] <= max_distance
+        # ]

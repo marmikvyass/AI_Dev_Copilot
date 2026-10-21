@@ -5,7 +5,7 @@ def main():
     retrieval = RetrievalService()
 
     matches = retrieval.retrieve_vector(
-        ques="explain me about neurons",
+        ques="Which technology names and skill descriptions are defined in the skills array?",
         project_id=12,
         n_result=5,
     )
