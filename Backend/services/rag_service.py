@@ -18,22 +18,38 @@ class RAGService:
         )
 
         if not matches:
-            return "I couldn't find relevant code in this project to answer your question."
+            return {
+                "answer": (
+                    "I couldn't find code chunks to answer this question "
+                    "from the indexed project."
+                ),
+                "sources": [],
+            }
 
         context_parts = []
+        sources = []
 
         for rank, match in enumerate(matches, start=1):
             metadata = match["metadata"]
+            file_path = metadata["file_path"]
+            chunk_index = metadata["chunk_index"]
+            content = match["content"]
 
             context_parts.append(
                 f"""
                         [Code Chunk {rank}]
-                        File: {metadata["file_path"]}
-                        Chunk: {metadata["chunk_index"]}
+                        File: {file_path}
+                        Chunk: {chunk_index}
                         Code:
-                        {match["content"]}
+                        {content}
                         """
             )
+
+            sources.append({
+                "file_path": file_path,
+                "chunk_index": chunk_index,
+                "distance": match["distance"],
+            })
 
         context = "\n\n".join(context_parts)
 
@@ -55,6 +71,11 @@ class RAGService:
         {question}
         """
 
-        return self.llm.generate(prompt)
+        answer =  self.llm.generate(prompt)
+
+        return {
+            'answer' : answer,
+            'sources' : sources
+        }
 
 
