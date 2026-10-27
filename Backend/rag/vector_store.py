@@ -1,8 +1,6 @@
 import chromadb
 from pathlib import Path
 
-from narwhals.selectors import matches
-
 
 class VectorStoreService:
     def __init__(self):
@@ -36,7 +34,7 @@ class VectorStoreService:
     def count(self)-> int:
         return self.collection.count()
 
-    def search(self, query_embedding: list[dict], project_id: int, n_result: int = 5) -> list[dict]:
+    def search(self, query_embedding: list[float], project_id: int, n_result: int = 5) -> list[dict]:
         result = self.collection.query(
             query_embeddings=[query_embedding],
             n_results = n_result,

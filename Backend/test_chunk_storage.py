@@ -12,7 +12,7 @@ async def main():
     db = Session()
 
     try:
-        project_id = 12
+        project_id = 13
 
         # 1. Verify that the project exists
         project = db.query(Project).filter(

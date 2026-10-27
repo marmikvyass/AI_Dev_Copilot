@@ -7,7 +7,7 @@ class AskQuestion(BaseModel):
 class ResourceRes(BaseModel):
     file_path : str
     chunk_index: int
-    distance: float
+    distance: float | None = None
 class AskQuesResponse(BaseModel):
     project_id: int
     question: str

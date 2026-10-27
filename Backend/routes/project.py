@@ -15,10 +15,10 @@ router = APIRouter(
 )
 
 @router.post('/', response_model=ProjectResponse)
-def create_project(project_data: ProjectCreate, db: Session = Depends(get_db), current_user : Users = Depends(get_current_user)):
+async def create_project(project_data: ProjectCreate, db: Session = Depends(get_db), current_user : Users = Depends(get_current_user)):
     service = ProjectService(db)
 
-    return service.create_project(project_data, current_user.id)
+    return await service.create_project(project_data, current_user.id)
 
 @router.get('/', response_model=list[ProjectResponse])
 def list_project(db: Session = Depends(get_db), current_user : Users = Depends(get_current_user)):
@@ -55,7 +55,7 @@ def ask_project_ques(
             detail='Project not found'
         )
 
-    rag_service = RAGService()
+    rag_service = RAGService(db)
     result = rag_service.answer_question(
         question=request.question,
         project_id = project_id

@@ -9,7 +9,7 @@ def main():
     try:
         pipeline = EmbeddingPipeline(db)
 
-        result = pipeline.index_project(project_id=12)
+        result = pipeline.index_project(project_id=13)
 
         print("Embedding pipeline result:", result)
 
