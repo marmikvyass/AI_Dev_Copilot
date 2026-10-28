@@ -4,10 +4,11 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from core.dbconnect import Base
-from models.project import Project
+
 from models.users import Users
 from models.code_chunk import CodeChunk
+from models.project import Project
+from core.dbconnect import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
